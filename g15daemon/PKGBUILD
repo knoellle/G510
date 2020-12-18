@@ -1,0 +1,39 @@
+# $Id: PKGBUILD 101656 2013-11-29 20:21:32Z arcanis $
+# Maintainer: Evgeniy Alekseev <arcanis.arch at gmail dot com>
+# Contributor: Valeriy Lyasotskiy <onestep@ukr.net>
+
+pkgname=g15daemon
+pkgver=1.9.5.3
+pkgrel=7
+pkgdesc="A daemon that makes it possible to use the G-Buttons and draw on the G15 LCD"
+arch=('i686' 'x86_64')
+url="http://www.g15tools.com/"
+license=('GPL')
+depends=('libg15render>=1.2')
+options=(!libtool)
+source=(${pkgname}/${pkgname}-${pkgver}.tar.bz2
+        g15daemon.service
+        g15daemon.patch)
+md5sums=('2cd8b4f1bd039bf804f1f472216742f0'
+         'c259d875f33a2fba53f9c2200a913c11'
+         SKIP)
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  patch -Np1 -i "${srcdir}/g15daemon.patch"
+  ./configure --prefix=/usr --sbindir=/usr/bin --disable-static
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  make DESTDIR="${pkgdir}" install
+  install -D -m 644 "${srcdir}/g15daemon.service" \
+                    "${pkgdir}/usr/lib/systemd/system/g15daemon.service"
+  mkdir "${pkgdir}/temp"
+  cp -R "../../macros" "${pkgdir}/temp/macros"
+  chmod +x ${pkgdir}/temp/macros/*
+  sudo cp -R "${pkgdir}/temp/macros" "/usr/share/g15daemon/"
+  rm -rf "${pkgdir}/temp"
+  sudo chmod -R 777 "/usr/share/g15daemon/macros"
+}

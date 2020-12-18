@@ -1,0 +1,81 @@
+#!/bin/sh
+#
+declare -i counter=0
+declare -i firstrun=1
+declare -i buffer
+declare -i buffer2
+declare -i buffer3
+declare -i buffer4
+declare -i buffer5
+declare -i buffer6
+
+if [ "$1" == "on" ]; then
+	DISPLAY=:0 xev | grep -A2 --line-buffered '^Key*' | sed -n '/keycode /s/^.*keycode \([0-9]*\).* (.*, \(.*\)).*$/\1 /p' |
+	while read kk; do
+		echo $kk
+		if [[ "$counter" -eq 1 && "$buffer" -ne "$kk" ]]; then
+			buffer2=buffer
+			echo "buffer2 = $buffer2"
+			((counter++))
+		elif [[ "$counter" -eq 3 && "$buffer2" -ne "$kk" && "$buffer4" -ne "$kk" && "$buffer5" -ne "$kk" && "$buffer6" -ne "$kk" ]]; then
+			buffer3=buffer
+			echo "buffer3 = $buffer3"
+			((counter++))
+		elif [[ "$counter" -eq 5 && "$buffer2" -ne "$kk" && "$buffer3" -ne "$kk" && "$buffer5" -ne "$kk" && "$buffer6" -ne "$kk" ]]; then
+			buffer4=buffer
+			echo "buffer4 = $buffer4"
+			((counter++))
+		elif [[ "$counter" -eq 7 && "$buffer2" -ne "$kk" && "$buffer3" -ne "$kk" && "$buffer4" -ne "$kk" && "$buffer6" -ne "$kk" ]]; then
+			buffer5=buffer
+			echo "buffer5 = $buffer5"
+			((counter++))
+		elif [[ "$counter" -eq 9 && "$buffer2" -ne "$kk" && "$buffer3" -ne "$kk" && "$buffer4" -ne "$kk" && "$buffer5" -ne "$kk" ]]; then
+			buffer6=buffer
+			echo "buffer6 = $buffer6"
+			((counter++))
+		fi
+		if [[ "$kk" -ne "$buffer" && "$counter" -eq 0 && "$kk" -ne "$buffer2" ]]; then
+			if [[ "$firstrun" -eq 1 ]]; then
+				buffer=$kk
+				firstrun=0
+				echo "xdotool keydown $kk" > /usr/share/g15daemon/macros/Macros;
+				((counter++))
+			else	
+				buffer=$kk
+				echo "&& xdotool keydown $kk" >> /usr/share/g15daemon/macros/Macros;
+				((counter++))
+			fi
+		elif [[ "$kk" -ne "$buffer2" && "$kk" -ne "$buffer3" && "$kk" -ne "$buffer4" && "$kk" -ne "$buffer5" && "$kk" -ne "$buffer6" && "$kk" -ne "$buffer" ]]; then
+			buffer=$kk
+			echo "&& xdotool keydown $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter++))		
+		elif [[ "$kk" -eq "$buffer" && "$buffer2" -ne "$kk" && "$buffer3" -ne "$kk" && "$buffer4" -ne "$kk" && "$buffer5" -ne "$kk" && "$buffer6" -ne "$kk" ]]; then
+			echo "&& xdotool keyup $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter--))
+		elif [[ "$kk" -eq "$buffer2" ]]; then
+			buffer2=0
+			echo "&& xdotool keyup $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter-=2))
+		elif [[ "$kk" -eq "$buffer3" ]]; then
+			buffer3=0
+			echo "&& xdotool keyup $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter-=2))
+		elif [[ "$kk" -eq "$buffer4" ]]; then
+			buffer4=0
+			echo "&& xdotool keyup $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter-=2))
+		elif [[ "$kk" -eq "$buffer5" ]]; then
+			buffer5=0
+			echo "&& xdotool keyup $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter-=2))
+		elif [[ "$kk" -eq "$buffer6" ]]; then
+			buffer6=0
+			echo "&& xdotool keyup $kk" >> /usr/share/g15daemon/macros/Macros;
+			((counter-=2))
+		fi
+		echo $counter
+	done;
+	echo "Macro Recorded";
+else
+	killall -9 xev;
+fi

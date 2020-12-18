@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+declare -i mkey=$(( $2 + 1 ))
+declare -r key="G14"
+
+#M1
+if [[ "$1" == "on" && $2 -eq 0 ]]; then
+#QtRead_M1_Dn
+	/usr/bin/notify-send $key: 'M'$mkey', state='$1
+#QtEnd_M1_Dn
+elif [ $2 -eq 0 ]; then
+#QtRead_M1_Up
+	/usr/bin/notify-send $key: 'M'$mkey', state='$1
+#QtEnd_M1_Up
+fi
+
+#M2
+if [[ "$1" == "on" && $2 -eq 1 ]]; then
+#QtRead_M2_Dn
+	/usr/bin/notify-send $key: 'M'$mkey', state='$1
+#QtEnd_M2_Dn
+elif [ $2 -eq 1 ]; then
+#QtRead_M2_Up
+	/usr/bin/notify-send $key: 'M'$mkey', state='$1
+#QtEnd_M2_Up
+fi
+
+#M3
+if [[ "$1" == "on" && $2 -eq 2 ]]; then
+#QtRead_M3_Dn
+	/usr/bin/notify-send $key: 'M'$mkey', state='$1
+#QtEnd_M3_Dn
+elif [ $2 -eq 2 ]; then
+#QtRead_M3_Up
+	/usr/bin/notify-send $key: 'M'$mkey', state='$1
+#QtEnd_M3_Up
+fi
+
+#Else (Errors)
+#If there is no input
+if [[ -z "$@" ]]; then
+	/usr/bin/notify-send $key": Error!" 'There was no input'
+fi
+
+#If M key state is out of range (less than zero or more than 2)
+if [[ $2 -lt 0 || $2 -gt 2 ]]; then
+	/usr/bin/notify-send $key": Error!" 'There is no M'$mkey'! (State='$1')'
+fi
+
+#If the first input variable (on/off) is incorrect. This should never happen.
+if [[ -n "$1" && "$1" != "on" && "$1" != "off" ]]; then
+	/usr/bin/notify-send $key": Warning!" '"'$1'" is not a valid state! (M'$mkey'), defaulting to "off".'
+fi
