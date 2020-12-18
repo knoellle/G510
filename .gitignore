@@ -1,0 +1,4 @@
+# ignore sources and built packages
+src
+pkg
+*.pkg.tar
