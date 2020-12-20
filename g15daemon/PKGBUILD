@@ -17,6 +17,7 @@ source=(${pkgname}/${pkgname}-${pkgver}.tar.bz2
 md5sums=('2cd8b4f1bd039bf804f1f472216742f0'
          'c259d875f33a2fba53f9c2200a913c11'
          SKIP)
+backup=(usr/share/g15daemon/macros)
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -33,7 +34,7 @@ package() {
   mkdir "${pkgdir}/temp"
   cp -R "../../macros" "${pkgdir}/temp/macros"
   chmod +x ${pkgdir}/temp/macros/*
-  sudo cp -R "${pkgdir}/temp/macros" "/usr/share/g15daemon/"
+  sudo cp -nR "${pkgdir}/temp/macros" "/usr/share/g15daemon/"
   rm -rf "${pkgdir}/temp"
   sudo chmod -R 777 "/usr/share/g15daemon/macros"
 }

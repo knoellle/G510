@@ -338,16 +338,16 @@
 +//Set keyboard color based on M led state.
 +	switch (leds & 0x07) {
 +	    case 1:
-+		setG510LEDColor(0, 0, 220);
++		setG510LEDColor(0, 220, 0);
 +		break;
 +	    case 2:
 +		setG510LEDColor(220, 0, 0);
 +		break;
 +	    case 4:
-+		setG510LEDColor(0, 220, 0);
++		setG510LEDColor(0, 0, 220);
 +		break;
 +	    default:
-+		setG510LEDColor(0, 0, 220);
++		setG510LEDColor(0, 220, 0);
 +		break;
 +	}
 +/* A little conversion is needed because the led bitmap for the G510 is completely different from the other keyboards.
