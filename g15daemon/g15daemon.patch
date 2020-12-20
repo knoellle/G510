@@ -175,7 +175,6 @@ diff -Nuarw g15daemon-1.9.5.3.orig/plugins/g15_plugin_uinput.c g15daemon-1.9.5.3
  static void g15_process_keys(g15daemon_t *masterlist, unsigned int currentkeys, unsigned int lastkeys)
  {
 -    /* 'G' keys */
-+    printf("%d\n", currentkeys);
 +    const char* launcher = "machinectl shell --uid=1000 .host";
 +    if(!(currentkeys & G15_KEY_LIGHT))
 +    {
