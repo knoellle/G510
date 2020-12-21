@@ -167,7 +167,7 @@ diff -Nuarw g15daemon-1.9.5.3.orig/plugins/g15_plugin_uinput.c g15daemon-1.9.5.3
      void (*keyup)(unsigned char code) = &g15_uinput_keyup;
      void (*keydown)(unsigned char code) = &g15_uinput_keydown;
  #else
-@@ -147,120 +173,246 @@
+@@ -147,120 +173,245 @@
  #endif
  #endif
      
@@ -465,7 +465,7 @@ diff -Nuarw g15daemon-1.9.5.3.orig/plugins/g15_plugin_uinput.c g15daemon-1.9.5.3
      
      if(map_Lkeys){
          /* 'L' keys...  */
-@@ -289,6 +441,73 @@
+@@ -289,6 +440,73 @@
          else if(!(currentkeys & G15_KEY_L5) && (lastkeys & G15_KEY_L5))
              keyup(LKEY_OFFSET+4);
      }
